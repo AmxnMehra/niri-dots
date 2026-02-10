@@ -47,10 +47,10 @@ input {
     // for the resolution.
     // If the mode is omitted altogether or is invalid, niri will pick one automatically.
     // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
-    mode "1920x1080@144.030"
+    mode "1920x1080@144.003"
 
     // You can use integer or fractional scale, for example use 1.5 for 150% scale.
-    scale 2
+    scale 1
 
     // Transform allows to rotate the output counter-clockwise, valid values are:
     // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
@@ -104,7 +104,6 @@ layout {
 
     shadow {
         // on
-
         softness 30
         spread 5
         offset x=0 y=5
@@ -117,8 +116,11 @@ layout {
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "noctalia-shell"
+// spawn-at-startup "qs" "-c" "noctalia-shell"
+// lock and suspend after 1min and sleep after 5min
+// spawn-at-startup "sh" "-c" "swayidle -w timeout 180 'qs -c noctalia-shell ipc call sessionMenu lockAndSuspend' before-sleep 'qs -c noctalia-shell ipc call sessionMenu lock'"// To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
+spawn-at-startup "swayidle -w timeout 180 'qs -c noctalia-shell ipc call sessionMenu lockAndSuspend' before-sleep 'qs -c noctalia-shell ipc call sessionMenu lock'"// To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 
-// To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 
 hotkey-overlay {
@@ -175,6 +177,24 @@ window-rule {
     open-floating true
 }
 
+window-rule {
+  // Rounded corners for a modern look.
+  geometry-corner-radius 20
+
+  // Clips window contents to the rounded corner boundaries.
+  clip-to-geometry true
+}
+
+debug {
+  // Allows notification actions and window activation from Noctalia.
+  honor-xdg-activation-with-invalid-serial
+}
+
+// Set the overview wallpaper on the backdrop.
+layer-rule {
+  match namespace="^noctalia-overview*"
+  place-within-backdrop true
+}
 
 // workspace "" {
 workspace "c" {
@@ -186,7 +206,11 @@ workspace "a" {
 
 window-rule {
     match title="Firefox"
-    open-on-workspace "c"
+    open-maximized true
+}
+
+window-rule {
+    match title="VMware Workstation"
     open-maximized true
 }
 
@@ -214,16 +238,24 @@ binds {
 
     // Mod-Shift-/, which is usually the same as Mod-?,
     // shows a list of important hotkeys.
-    Mod+Shift+Slash { show-hotkey-overlay; }
-
+    Mod+F1 { spawn-sh "qs -c noctalia-shell ipc call plugin:keybind-cheatsheet toggle";  }
     Mod+Return hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
-    Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
-    Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
+    Mod+Shift+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
+
+    // Core Noctalia binds
+    Mod+Space { spawn-sh "qs -c noctalia-shell ipc call launcher toggle"; }
+    Mod+Shift+Comma { spawn-sh "qs -c noctalia-shell ipc call settings toggle"; }
+    Mod+Alt+L { spawn-sh "qs -c noctalia-shell ipc call lockScreen lock"; }
+
+    Mod+Shift+c {
+      spawn-sh "qs -c noctalia-shell ipc call sessionMenu toggle"
+    }
+
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
     // For example, this is a standard bind to toggle the screen reader (orca).
-    Super+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
+    mod+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
 
     // Example volume keys mappings for PipeWire & WirePlumber.
     // The allow-when-locked=true property makes them work even when the session is locked.
@@ -238,7 +270,7 @@ binds {
     // but you need to manually put each argument in separate "" quotes.
     XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
-
+    //
     // Open/close the Overview: a zoomed-out view of workspaces and windows.
     // You can also move the mouse into the top-left hot corner,
     // or do a four-finger swipe up on a touchpad.
@@ -444,7 +476,7 @@ binds {
     // Mod+Space       { switch-layout "next"; }
     // Mod+Shift+Space { switch-layout "prev"; }
 
-    Mod+S { screenshot-window; }
+    Mod+Shift+S { screenshot-window; }
     Ctrl+Print { screenshot-screen; }
     Alt+Print { screenshot; }
 
@@ -468,7 +500,8 @@ binds {
     
     //custom Applications binds
         Mod+E { spawn-sh "kitty -e yazi"; }
-        Mod+B { spawn-sh "brave"; }
+        Mod+B { spawn-sh "zen-browser"; }
+        Mod+Shift+B { spawn-sh "firefox";}
 }
 
 // custom settings
