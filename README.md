@@ -1,6 +1,6 @@
-## niri-dots
+## Niri-Dots
 
-Personal dotfiles for my Linux desktop, centered around the **niri** Wayland compositor.  
+Personal dotfiles for my Linux desktop, centered around the **Niri** Wayland compositor.  
 This repo collects my window manager, terminal, editor, theme, and shell configs in one place so you can quickly see how everything fits together and reuse anything you like.
 
 ### Overview
@@ -23,7 +23,7 @@ This repo collects my window manager, terminal, editor, theme, and shell configs
 - **`noctalia/`**: Color and theme configuration shared across apps (where applicable).
 - **`.zshrc`**: Shell aliases, prompts, environment variables.
 - **`scripts/`**: Small helper scripts like `toggle-internal-keyboard.sh`.
-- **`images/`**: Screenshots of the desktop (you add these).
+- **`images/`**: Screenshots of the desktop
 
 ### Desktop screenshots
 
