@@ -489,7 +489,6 @@ binds {
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 
     // The quit action will show a confirmation dialog to avoid accidental exits.
-    Mod+Shift+E { quit; }
     Ctrl+Alt+Delete { quit; }
 
     // Powers off the monitors. To turn them back on, do any input like
@@ -497,7 +496,8 @@ binds {
     Mod+Alt+P { power-off-monitors; }
     
     //custom Applications binds
-        Mod+E { spawn-sh "kitty -e yazi"; }
+        Mod+Shift+E { spawn-sh "kitty -e yazi" ; }
+        Mod+E { spawn-sh "nautilus"; }
         Mod+B { spawn-sh "zen-browser"; }
         Mod+Shift+B { spawn-sh "firefox";}
         Mod+Shift+P {spawn-sh "firefox --private-window";}
